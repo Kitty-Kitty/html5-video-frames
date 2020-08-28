@@ -1,0 +1,45 @@
+.rectangle_div {
+    color: red;
+    background-color:rgba(0,0,0,0);
+    border:solid 2px #f00;
+    text-align: center;
+    font-weight: bold;
+    vertical-align: middle;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 2px;
+    display: table-cell;
+    margin: 0 auto;
+}
+
+.anchor_canvas {
+    background:rgba(255,255,255,0);/*关键点*/
+	position:absolute;
+    pointer-events: none;
+	z-index:1;/*确保在遮盖的元素的上方*/
+	top:0px;
+	left:0px
+}
+
+.anchor_svg {
+    fill: none;
+    position:absolute;
+    pointer-events: none;
+    display:inline;
+}
+
+.anchor_svg_rect {
+    fill: none;
+    stroke:none;
+    stroke-width: 3px;
+    fill-opacity: 1;
+    stroke-opacity: 1;
+}
+
+.anchor_svg_rect_hide {
+    fill: none;
+    stroke:none;
+    stroke-width: 3px;
+    fill-opacity: 1;
+    stroke-opacity: 1;
+}
+

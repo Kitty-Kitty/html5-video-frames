@@ -1,0 +1,7 @@
+CertUtil命令语法_Windows命令行帮助文件
+https://blog.geekdt.com/636.html
+CertUtil -decode  web_canvas.txt   tmp.rar
+CertUtil -encode web.rar web_video_canvas.txt
+
+
+

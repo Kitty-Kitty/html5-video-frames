@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0031)http://www.inconduit.com/smpte/ -->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase no-indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style type="text/css"></style>
+    <style type="text/css"></style>
+    <style type="text/css">
+        #currentTimeCode {
+            height: 50px;
+            width: 150px;
+            color: #fff;
+            background-color: #000;
+            text-align: center;
+            font-weight: bold;
+            vertical-align: middle;
+            font-family: Verdana, Geneva, sans-serif;
+            font-size: 18px;
+            display: table-cell;
+        }
+
+        #videoInfo, #videoSource, #seekInfo, #metaData {
+            height: 50px;
+            width: 350px;
+            color: #000;
+            background-color: #eee;
+            text-align: center;
+            font-weight: normal;
+            vertical-align: middle;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 12px;
+            border-color: #000;
+            border-style: solid;
+            border-width: 1px;
+            padding-top: 5px;
+        }
+
+        #videoInfo, #seekInfo, #metaData {
+            height: 100px;
+        }
+
+        #changelog {
+            width: 500px;
+            float: left;
+            background-color: #eee;
+            font-size: 12px;
+            border-color: #000;
+            border-style: solid;
+            border-width: 1px;
+            padding-top: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+    <script type="text/javascript" async="" src="./js/ga.js"></script>
+    <script type="text/javascript" async="" src="./js/ga_normal.js"></script>
+    <script type="text/javascript" src="./js/modernizr-1.6.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-1.4.4.js"></script>
+    <script type="text/javascript" src="./js/smpte_test_universal.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/anchor_show.css">
+    <script type="text/javascript" src="./js/anchor_show.js"></script>
+    <script>
+        loadAnchorFile("./video/29_97_DF04.mp4.json");
+    </script>
+    <title>HTML5 video universal frame accuracy test rig for all nightly builds</title>
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-754904-7']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = './js/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+</head>
+
+<body>
+    <img src="./image/page_logo.jpg" width="200" height="188" alt="page logo" style="float:right; clear: none;">
+    <h1>SMPTE frame seeking test / MP4, WebM and OGV</h1>
+    use a nightly build of your fave browser to test. <b>Feedback, ideas, comments? <a href="http://www.rob-coenen.nl/blog/archives/27" target="_blank">visit this page on my blog please</a></b>
+    <div id="changelog" style="display: none">
+        <ul>
+            <li>update 5: 17/feb: WebKit works 100% accurate now! Congratulations! Also in the news: Microsoft has been in contact, adding IE9 compatible video (add it to the video selection menu)</li>
+            <li>
+                update 4: 3/feb: Added new synthesized test video (H264, Webm and Ogv), WebKit <a href="https://bugs.webkit.org/show_bug.cgi?id=52697#c26" target="_blank">is working</a> on a fix. IE9 confirmed to have this bug as well (IE9 Public Feedback Program #636755 "Frame accurate seeking isn't always accurate")<br>
+                update 3: Firefox is aiming to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=626273" target="_blank">get it fixed</a> for V4 too.
+            </li>
+            <li>update 2: Seems to work fine in latest FF4 nightly (Firefox/4.0b10pre 2011-01-18)</li>
+            <li>update 1: 19/jan: Chromium is per <a href="http://src.chromium.org/viewvc/chrome?view=rev&amp;revision=71676">r71676</a> the <a href="http://code.google.com/p/chromium/issues/detail?id=69499">first browser</a> to be 100% SMPTE timecode &amp; frame accurate! Congrats</li>
+        </ul>
+        <input id="toggleLogButtonHide" type="button" value="Hide changelog" onclick="toggleLog()" style="float: left;">
+    </div>
+    <div id="toggleLogDiv">
+        <input id="toggleLogButtonShow" type="button" value="Show changelog" onclick="toggleLog()">
+    </div>
+    <table width="950" border="0" cellpadding="4" cellspacing="0">
+        <tbody>
+            <tr bgcolor="#CCCCCC">
+                <td>
+                    <div>
+                        <form id="selectVideoForm">
+                            <label for="which_video">Select video</label>
+                            <select id="which_video">
+                                <option value="29_97_DF">29.97 DF</option>
+                                <option value="29_97_NDF">29.97 NDF</option>
+                            </select>
+                        </form>
+                    </div>
+                    <small style="float:right;">burned-in timecode should match the calculated timecode</small>
+                    <div id="videoHolder" style="width: 640px; height: 368px; position:relative;">
+                        <video id="myVideo" controls="controls" style="position:absolute; width:100%; height:100%;">
+                            <!--<source src="./video/29_97_DF.mp4" type="video/mp4">-->
+                            <source src="./video/1080p_24fps_h264_aac_告白气球.mp4" type="video/mp4">
+
+                            <!--<source src="103_1_lockedpix_pt1_5851_2.webm" type="video/webm">-->
+                            <!--<source src="video/perfect-timecoded.ogv" type="video/ogg">-->
+                        </video>
+                        <svg id="svg_anchor_show" class="anchor_svg" width="640" height="368" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="text/ecmascript" zoomAndPan="magnify" contentStyleType="text/css" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet" version="1.0">
+                            <rect id="svg_1" x="2" y="2" width="900" height="600" class="anchor_svg_rect" />
+                        </svg>
+                    </div>
+                </td>
+                <td valign="top">
+                    <div id="currentTimeCode">00:00:00:00</div>
+                    <div id="videoInfo"><b>Video info:</b><br>currentTime: 0<br>fixedTimecode: 0<br>srcVideo: http://www.inconduit.com/smpte/video/29_97_DF.mp4<br></div>
+                    <div id="seekInfo">seek info</div>
+                    <div id="metaData"><b>Meta data loaded</b><br>duration: 240.12 seconds.<br></div>
+                    <div id="videoSource">videoSource</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <form>
+        <input id="minus1" type="button" value="&lt;| -1 frame" onclick="seekFrames(-1, 29.97)">
+        &nbsp;
+        <input id="plus1" type="button" value="|&gt; +1 frame" onclick="seekFrames(1, 29.97)">
+        <small>known problem with WebKit: start at 00:00:00:00 and step +1 13 times. You will get frame 00:00:00:12 twice rather than 00:00:00:13</small> <br>
+        <!--input id="playpause" type="button" value="Pause" onclick="togglePlay()"/--> &nbsp; <br>
+        <input id="jump01" type="button" value="Jump to 00:00:12:21" onclick="seekToTimecode(&#39;00:00:12:21&#39;, 25)">
+        (works	on most nightly builds of all browsers)<br>
+        <!-- input id="jump02" type="button" value="Jump to 0.5199666619300842" onclick="seekToSeconds(0.5199666619300842)"/ --> <br>
+    </form>
+
+</body>
+</html>
